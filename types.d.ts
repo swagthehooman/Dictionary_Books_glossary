@@ -1,5 +1,5 @@
 type Meanings = {
-    partofspeech: string,
+    partOfSpeech: string,
     definitions: Definitions[],
     synonyms: string[],
     antonyms: string[],

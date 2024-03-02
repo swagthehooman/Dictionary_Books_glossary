@@ -5,82 +5,64 @@ import { ChangeEvent, ReactEventHandler, useEffect, useState } from "react";
 import { Phonetics } from "../components/Phonetics";
 import { Meanings } from "../components/Meanings";
 import Link from "next/link";
+import '../globalicons.css';
+import useSWR from "swr";
+import { fetchWord } from "../utils/FetchData";
+import useSWRImmutable from "swr/immutable";
 
 export default function WordPage() {
 
     const [word, setWord] = useState<string>('')
+    const [shouldFetch, setShouldFetch] = useState<boolean>(false)
+    const { data, error, isLoading } = useSWRImmutable(shouldFetch ? word : null, fetchWord);
 
     const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+        setShouldFetch(false)
         setWord(e.target.value)
-
     }
-
-    // useEffect(() => console.log(word), [word])
 
     //write logic for fetching data from api
     //set conditions for dynamic conditional render of dom.
 
+    const handleClick = (e: React.MouseEvent) => {
+        setShouldFetch((prev: boolean) => !prev)
+    }
+
     return (<main className={`${judson.className}`}>
         <img src="/images/newspaperBackground.jpeg" alt="background" className="fixed -left-40 -top-40 w-[50%] rotate-45 -z-10 blur-[1px] opacity-30" />
         <div className="absolute">
-            <Link href={'/'}>Back</Link>
+            <Link href={'/'} className="flex items-center gap-2"><span className="material-symbols-outlined">arrow_back</span>Back</Link>
         </div>
-        <div className="w-full flex justify-center mt-4">
+        <div className="w-full flex justify-center items-center gap-4 mt-4">
             <input type="text" name="wordInput" value={word} placeholder="Type a word" onChange={handleSearchInput} className="text-slate-900 text-2xl p-4 rounded-md w-[40%] h-12 text-center outline-none" />
+            <span onClick={handleClick} className="cursor-pointer material-symbols-outlined">search</span>
         </div>
-        <div className="grid grid-cols-2 m-16 gap-12">
+
+        {isLoading && <p>Loading</p>}
+        {error && <p>Error</p>}
+        {word === '' && <p>Type to get a word meaning</p>}
+        {word !== '' && data && <div className="grid grid-cols-2 m-16 gap-12">
             <div className="text-xl">
-                <h3 className="text-4xl"><span className={`${kalam.className} mr-2`}>Word:</span> Allure</h3>
+                <h3 className="text-4xl"><span className={`${kalam.className} mr-2`}>Word:</span> {data[0].word}</h3>
                 <p>Meanings</p>
-                <ul>
+                <ol>
                     <li>
-                        <Meanings meaning={
-                            {
-                                definitions: [
-                                    {
-                                        definition: 'The power to attract, entice; the quality causing attraction.',
-                                        antonyms: [],
-                                        synonyms: [],
-                                    }, {
-                                        definition: 'Gait; bearing',
-                                        antonyms: [],
-                                        synonyms: [],
-                                    }
-                                ], antonyms: [],
-                                synonyms: [],
-                                partofspeech: 'noun'
-                            }
-                        } />
-                        <Meanings meaning={
-                            {
-                                definitions: [
-                                    {
-                                        definition: 'To entice; to attract.',
-                                        antonyms: [],
-                                        synonyms: [],
-                                    }
-                                ], antonyms: [],
-                                synonyms: [
-                                    "attract",
-                                    "decoy",
-                                    "entice",
-                                    "seduce",
-                                    "tempt"],
-                                partofspeech: 'verb'
-                            }
-                        } />
+                        {data[0].meanings.map((meaning: Meanings, index: number) => <div className="flex mb-8">
+                            <>{index + 1})</>
+                            <Meanings key={index} meaning={meaning} />
+                        </div>)}
                     </li>
-
-                </ul>
-
+                </ol>
             </div>
             <div className="text-xl">
                 <h3 className="text-4xl"><span className={`${kalam.className}`}>Phonetic:</span> "/əˈl(j)ʊɚ/"</h3>
                 <p>Phonetics: </p>
-                <Phonetics phonetic={[
-                    { audio: '', text: '/əˈl(j)ʊɚ/' }
-                ]} />
+                {data[0].phonetics.map((phonetic: Phonetics, index: number) => <div className="flex mb-8">
+                    <>{index + 1})</>
+                    <Phonetics key={index} phonetic={phonetic} />
+                </div>
+                )}
             </div>
-        </div>
+        </div>}
     </main>);
 }
