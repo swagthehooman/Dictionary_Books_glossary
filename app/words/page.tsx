@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from "react";
 import { Phonetics } from "../components/Phonetics";
 import { Meanings } from "../components/Meanings";
 import Link from "next/link";
-import '../globalicons.css';
+import '../globalIcons.css';
 // import useSWR from "swr";
 import { fetchWord } from "../utils/FetchData";
 import useSWRImmutable from "swr/immutable";
