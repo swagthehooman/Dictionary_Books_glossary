@@ -8,7 +8,8 @@ type Meanings = {
 type Definitions = {
     definition: string,
     synonyms: string[],
-    antonyms: string[]
+    antonyms: string[],
+    example: string|undefined
 }
 
 type Phonetics = {

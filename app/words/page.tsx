@@ -1,12 +1,12 @@
 'use client'
 
 import { judson, kalam } from "../fontConsts";
-import { ChangeEvent, ReactEventHandler, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Phonetics } from "../components/Phonetics";
 import { Meanings } from "../components/Meanings";
 import Link from "next/link";
 import '../globalicons.css';
-import useSWR from "swr";
+// import useSWR from "swr";
 import { fetchWord } from "../utils/FetchData";
 import useSWRImmutable from "swr/immutable";
 
@@ -38,9 +38,12 @@ export default function WordPage() {
             <span onClick={handleClick} className="cursor-pointer material-symbols-outlined">search</span>
         </div>
 
-        {isLoading && <p>Loading</p>}
-        {error && <p>Error</p>}
-        {word === '' && <p>Type to get a word meaning</p>}
+        {isLoading && <p className="absolute top-0 -z-10 flex justify-center items-center h-screen w-full text-2xl">Loading</p>}
+
+        {error && <p className="absolute top-0 -z-10 flex justify-center items-center h-screen w-full text-2xl">Error!! Word doesn't exist or api error</p>}
+
+        {word === '' && <p className="absolute top-0 -z-10 flex justify-center items-center h-screen w-full text-2xl">Type to get a word meaning</p>}
+
         {word !== '' && data && <div className="grid grid-cols-2 m-16 gap-12">
             <div className="text-xl">
                 <h3 className="text-4xl"><span className={`${kalam.className} mr-2`}>Word:</span> {data[0].word}</h3>
