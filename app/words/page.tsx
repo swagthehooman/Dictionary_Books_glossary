@@ -21,15 +21,12 @@ export default function WordPage() {
         setWord(e.target.value)
     }
 
-    //write logic for fetching data from api
-    //set conditions for dynamic conditional render of dom.
-
     const handleClick = (e: React.MouseEvent) => {
         setShouldFetch((prev: boolean) => !prev)
     }
 
     return (<main className={`${judson.className}`}>
-        <img src="/images/newspaperBackground.jpeg" alt="background" className="fixed -left-40 -top-40 w-[50%] rotate-45 -z-10 blur-[1px] opacity-30" />
+        <img src="/images/newspaperBackground.jpeg" alt="background" className="fixed -left-40 -top-40 w-[50%] rotate-45 -z-10 blur-[1px] opacity-15" />
         <div className="absolute">
             <Link href={'/'} className="flex items-center gap-2"><span className="material-symbols-outlined">arrow_back</span>Back</Link>
         </div>
